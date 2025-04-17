@@ -1,0 +1,48 @@
+# from Bole Ma, modified by Guanxiong
+
+# vscode folder
+.vscode/
+
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+bin/
+
+# the entire build directory
+build/
+
+# pycache
+__pycache__/
+
+# other things
+src/TAGS
+src/tags
+*.os
+dependencies/jsoncpp/src/jsontestrunner/jsontestrunner
+dependencies/jsoncpp/src/test_lib_json/test_lib_json
