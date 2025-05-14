@@ -1,0 +1,21 @@
+// Author: Guanxiong
+
+
+{
+    "frame_time": 0.04,
+    "frame_steps": 8,
+    "duration": 10,
+    "cloths": [{
+        "mesh": "meshes/fem_cloth_15x15_alternate.obj",
+        "transform": {"translate": [0, 0, 0], "rotate": [45, 1, 0, 0]},
+        "materials": [{
+            "data": "materials/camel-ponte-roma.json",
+                "thicken": 2,
+                "strain_limits": [0.95, 1.05]
+	    }]
+    }],
+    "handles": [{"nodes": [0, 1, 16, 17, 14, 15, 29, 30]}],
+    "gravity": [0, -9.81, 0],
+    "disable": ["popfilter", "strainlimiting", "remeshing", "fracture"],
+    "magic": {"repulsion_thickness": 10e-3, "collision_stiffness": 1e6}
+}
