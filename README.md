@@ -24,6 +24,13 @@ git clone https://github.com/kaist-silab/arcsim.git && cd arcsim/
 sudo chmod +x install.sh && sudo ./install.sh
 ```
 
+3. Set up Python env
+```
+conda create -n arcsim_0.3.1 python=3.10.13
+conda activate arcsim_0.3.1
+pip install -r requirements.txt
+```
+
 ## 📑 Usage
 
 ### Commands

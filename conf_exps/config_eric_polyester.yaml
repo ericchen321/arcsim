@@ -1,0 +1,29 @@
+# material properties
+density: 1.0
+meshes:
+  - "meshes/tshirt.obj"
+
+# spatial sparsification
+# TODO:
+spatially_sparsify: false
+
+# timing
+sim_duration: 10.0
+sim_fps: 40
+sim_substeps: 25
+
+# world properties
+grav_const: -9.81
+ground: false
+
+# rollout generation options; including
+# dataset split and options that apply to
+# only train/test rollouts
+data_gen_by: "simulation"
+rollouts:
+  num_rollouts: 32
+  test_ratio: 0.25
+  num_anchors_train: 2
+  num_pts_per_anchor_train: 10
+  num_pts_per_anchor_test: 10
+  anchors_at_corners_test: true

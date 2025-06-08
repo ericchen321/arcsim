@@ -1,0 +1,3 @@
+# packages required to run Python scripts under scripts/
+numpy==1.26.1
+PyYAML==6.0.1
