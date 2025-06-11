@@ -37,12 +37,16 @@
 #include <cstdio>
 #include <fstream>
 
+#include <H5Cpp.h>
+using namespace H5;
+
 using namespace std;
 
 string inprefix, outprefix;
 static fstream timingfile;
 
 Simulation sim;
+std::vector<Mesh> saved_meshes;
 int frame;
 Timer fps;
 
@@ -74,6 +78,8 @@ void init_relax() {
 static void save (vector<Mesh*> &meshes, int frame) {
     if (!outprefix.empty() && frame < 100000)
         save_state(sim, stringf("%s/%05d", outprefix.c_str(), frame));
+        // Only tracking the state of the first cloth mesh in the simulation.
+        saved_meshes.push_back(sim.cloths[0].mesh);
 }
 
 static void save_timings () {
@@ -88,6 +94,58 @@ static void save_timings () {
     out << endl;
 }
 
+// TODO: currently we make an assumption that all arcsim simulations involve only a single cloth mesh.
+void save_h5(Simulation& sim) {
+    std::string data_dir = "data/";
+    std::string file_name = "test";
+    file_name += ".h5";
+
+    std::string path = data_dir + file_name;
+    hid_t file_id = H5Fcreate(path.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
+
+    uint32_t frame_count = saved_meshes.size();
+
+    // gather up position
+    std::vector<std::vector<Vec3>> positions;
+    for (int i = 0; i < saved_meshes.size(); i++) {
+        std::vector<Vec3> pos;
+        for (int j = 0; j < saved_meshes[i].verts.size(); j++) {
+            pos.push_back(saved_meshes[i].verts[j]->node->x);
+        }
+    }
+
+    // compute velocities
+    std::vector<std::vector<Vec3>> velocities;
+    for (int i = 1; i < positions.size(); i++) {
+        std::vector<Vec3> vel;
+        for (int j = 0; j < positions[i].size(); j++) {
+            vel.push_back(positions[i][j] - positions[i - 1][j]);
+        }
+        velocities.push_back(vel);
+    }
+
+    // erase first element so velocity and positions data have same size.
+    if (positions.size() > velocities.size()) {
+        positions.erase(positions.begin());
+    }
+    
+    hsize_t dim_pos[3] = {frame_count, positions.size(), 3 };
+    hid_t pos_id = H5Screate_simple(3, dim_pos, NULL);
+    hid_t dataset_pos_id = H5Dcreate2(file_id, "/positions", H5T_NATIVE_FLOAT, pos_id, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+    H5Dwrite(dataset_pos_id, H5T_NATIVE_FLOAT, H5S_ALL, H5S_ALL, H5P_DEFAULT, positions.data());
+    H5Dclose(dataset_pos_id);
+    H5Sclose(pos_id);
+
+    hsize_t dim_vel[3] = {frame_count, velocities.size() };
+    hid_t vel_id = H5Screate_simple(3, dim_vel, NULL);
+    hid_t dataset_vel_id = H5Dcreate2(file_id, "/velocities", H5T_NATIVE_FLOAT, vel_id, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+    H5Dwrite(dataset_vel_id, H5T_NATIVE_FLOAT, H5S_ALL, H5S_ALL, H5P_DEFAULT, velocities.data());
+    H5Dclose(dataset_vel_id);
+    H5Sclose(vel_id);
+
+    H5Fclose(file_id);
+}
+
 void save (Simulation &sim, int frame) {
     save(sim.cloth_meshes, frame);
 }
@@ -100,8 +158,10 @@ void sim_step() {
         save_timings();
     }
     fps.tock();
-    if (sim.time >= sim.end_time || sim.frame >= sim.end_frame)
+    if (sim.time >= sim.end_time || sim.frame >= sim.end_frame) {
+        save_h5(sim);
         exit(EXIT_SUCCESS);
+    }
 }
 
 void offline_loop() {

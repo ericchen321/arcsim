@@ -31,6 +31,7 @@
 #include <string>
 #include <vector>
 
+void save_h5(Simulation &sim);
 void save (Simulation &sim, int frame);
 void init_physics (const std::string &json_file, std::string outprefix, bool is_reloading);
 void init_resume(const std::vector<std::string> &args);

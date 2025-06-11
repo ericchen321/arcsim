@@ -1410,6 +1410,7 @@ save	runphysics.cpp	/^static void save (vector<Mesh*> &meshes, int frame) {$/;"	
 save	runphysics.cpp	/^void save (Simulation &sim, int frame) {$/;"	f
 save	util.hpp	/^	bool save() { return mode == Save; }$/;"	f	struct:Serialize
 save_every	simulation.hpp	/^    int frame_steps, save_every;$/;"	m	struct:Simulation
+save_h5	runphysics.cpp	/^void save_h5(Simulation& sim) {$/;"	f
 save_obj	io.cpp	/^void save_obj (const Mesh &mesh, const string &filename) {$/;"	f
 save_objs	io.cpp	/^void save_objs (const vector<Mesh*> &meshes, const string &prefix) {$/;"	f
 save_obstacle_transforms	displayreplay.cpp	/^static void save_obstacle_transforms (const vector<Obstacle> &obs, int frame,$/;"	f	file:
@@ -1418,6 +1419,7 @@ save_screenshot	io.cpp	/^void save_screenshot (const string &filename) {$/;"	f
 save_state	io.cpp	/^void save_state (T& state, const string &prefix) {$/;"	f
 save_timings	runphysics.cpp	/^static void save_timings () {$/;"	f	file:
 save_transformation	io.cpp	/^void save_transformation (const Transformation &tr, const string &filename) {$/;"	f
+saved_meshes	runphysics.cpp	/^std::vector<Mesh> saved_meshes;$/;"	v
 scalar_mult	lsnewton.cpp	/^static void scalar_mult (vector<double> &v, double a, const vector<double> &x) {$/;"	f	file:
 scalar_mult	trustregion.cpp	/^static void scalar_mult (vector<double> &v, double a, const vector<double> &x) {$/;"	f	file:
 scale	display.cpp	/^struct DisplayMode { string name; double scale; bool active; };$/;"	m	struct:DisplayMode	file:

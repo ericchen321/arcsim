@@ -205,7 +205,6 @@ void compute_ms_data (Face* face) {
             SVD<3,3> svd = singular_value_decomposition(face->invDm);
             for (int i=0; i<3; i++) {
                 if (svd.s[i] > CLAMP) {
-                    cout << "clamping " << svd.s[i] << " to " << CLAMP << endl;
                     svd.s[i] = CLAMP;
                 }
             }

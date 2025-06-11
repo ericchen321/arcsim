@@ -69,6 +69,8 @@ struct Simulation {
 };
 extern Simulation sim;
 
+extern std::vector<Mesh> saved_meshes;
+
 void prepare (Simulation &sim);
 
 void relax_initial_state (Simulation &sim);
