@@ -2,9 +2,9 @@
 
 
 {
-    "frame_time": 0.04,
-    "frame_steps": 8,
-    "duration": 10,
+    "frame_time": 1,
+    "frame_steps": 1,
+    "end_time": 3,
     "cloths": [{
         "mesh": "meshes/fem_cloth_15x15_alternate.obj",
         "transform": {"translate": [0, 0, 0], "rotate": [45, 1, 0, 0]},

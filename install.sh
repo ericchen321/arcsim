@@ -56,7 +56,7 @@ if [ "$UNAME" = "Linux" ]; then
 			Yes) echo "Installing necessary packages..."; apt-get update; 
 				apt-get install gcc make g++ libboost-all-dev freeglut3-dev \
 					gfortran liblapacke-dev libpng-dev libpng++-dev scons \
-					libatlas-base-dev ctags libopenblas-dev; break;;
+					libatlas-base-dev ctags libopenblas-dev libhdf5-dev; break;;
 			No) echo "Skipping..."; break;;
 		esac
 	done

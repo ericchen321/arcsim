@@ -7,6 +7,7 @@ import argparse
 import yaml
 import json
 import os
+import subprocess
 from datetime import datetime
 from pathlib import Path
 from src_python.json import build_jsons
@@ -47,7 +48,16 @@ def main():
             json.dump(json_config, f, indent=4)
 
     # TODO: call ARCSim binary to simulate each rollout
-    raise NotImplementedError
+    for rollout_idx, json_config in enumerate(jsons):
+        json_path = os.path.join(
+            out_dir, f'rollout_{rollout_idx:03d}.json')
+        
+        rollout_dir = os.path.join(
+            out_dir, f'rollout_{rollout_idx:03d}')
+        
+        os.makedirs(rollout_dir, exist_ok=True)
+
+        subprocess.run(['./bin/arcsim', 'simulateoffline', json_path, rollout_dir])
 
 
 if __name__ == '__main__':
