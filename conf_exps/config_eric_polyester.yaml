@@ -3,6 +3,9 @@ density: 1.0
 meshes:
   - "meshes/tshirt.obj"
 
+material:
+  - "materials/11oz-black-denim.json"
+
 # spatial sparsification
 # TODO:
 spatially_sparsify: false
