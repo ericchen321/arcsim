@@ -1,14 +1,17 @@
 # Author: Guanxiong, Ganidhu
 
-
+import trimesh
+import numpy as np
 from typing import Dict, Any, List
+from sklearn.neighbors import NearestNeighbors
 
-def build_jsons(master_config: Dict[str, Any]) -> List[Dict[str, Any]]:
+def build_jsons(master_config: Dict[str, Any], output_dir: str) -> List[Dict[str, Any]]:
     """
     Build JSONs from the master configuration.
 
     Parameters:
         master_config (Dict[str, Any]): The master configuration dictionary.
+        output_dir: The output dir for the h5 files.
 
     Returns:
         A list of JSON configurations, one for each rollout.
@@ -22,46 +25,85 @@ def build_jsons(master_config: Dict[str, Any]) -> List[Dict[str, Any]]:
     gravity = [0.0, master_config["grav_const"], 0.0]
     disable = ["popfilter", "strainlimiting", "remeshing", "fracture"]
 
+    num_anchors = master_config["rollouts"]["num_anchors"]
+    num_pts_per_anchor = master_config["rollouts"]["num_pts_per_anchor"]
+    trained_knns = []
+    loaded_meshes = []
+
     cloth_transforms = []
-    handles = []
-    for i in cloth_meshes:
+    for mesh_path in cloth_meshes:
         transform = {
-            "translate": [0, 0, 0],
-            "rotate": [45, 1, 0, 0],
+            "rotate": [0, 1, 0, 0],
         }
 
         handle = {
-            "nodes": [0, 1, 16, 17, 14, 15, 29, 30]
+            "nodes": [0]
         }
 
+        mesh = trimesh.load_mesh(mesh_path)
+        mesh.merge_vertices(True, True, 3, 3, 2)
+
+        knn = NearestNeighbors(n_neighbors=num_pts_per_anchor - 1)
+        knn.fit(mesh.vertices)
+
+        trained_knns.append(knn)
+        loaded_meshes.append(mesh)
+
         cloth_transforms.append(transform)
-        handles.append(handle)
 
     cloths = []
     for i in range(len(cloth_meshes)):
         cloth = {
             "mesh": cloth_meshes[i],
             "transform": cloth_transforms[i],
-            "materials": cloth_materials[i]
+            "materials": [{
+                "data": cloth_materials[i]
+            }],
+            "remeshing": {
+                "size": [1, 1]
+            }
         }
 
         cloths.append(cloth)
 
-    json_data = {
-        "frame_time": frame_time,
-        "frame_steps": frame_steps,
-        "duration": duration,
-        "cloths": cloths,
-        "handles": handles,
-        "gravity": gravity,
-        "disable": disable
-    }
-
     num_rollouts = master_config["rollouts"]["num_rollouts"]
     jsons = []
-
     # TODO: initialize I.C data randomly
-    for i in range(num_rollouts):
+    for rollout_idx in range(num_rollouts):
+        handles = []
+        for cloth in cloths:
+            # randomize starting orientation of cloth
+            rot = np.random.random((4,)).tolist()
+            rot[0] *= 90.0 # rotation angle in the range of 0 to 90
+
+            cloth["transform"]["rotate"] = rot
+
+            knn = trained_knns[i]
+            mesh = loaded_meshes[i]
+
+            # randomize pin points
+            anchor_ctr_idxs = np.random.choice(
+                len(mesh.vertices), num_anchors, replace=False)
+
+            if num_pts_per_anchor > 1:
+                _, idx = knn.kneighbors(mesh.vertices[anchor_ctr_idxs])
+                handles.append({"nodes": idx.flatten().tolist()})
+
+            else:
+                handles.append({"nodes": anchor_ctr_idxs.tolist()})
+
+        json_data = {
+            "name": f'rollout_{rollout_idx:03d}',
+            "h5_output": f'{output_dir}/rollout_{rollout_idx:03d}/',
+            "frame_time": frame_time,
+            "frame_steps": frame_steps,
+            "end_time": duration,
+            "cloths": cloths,
+            "handles": handles,
+            "gravity": gravity,
+            "disable": disable
+        }
+
         jsons.append(json_data)
 
 

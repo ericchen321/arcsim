@@ -150,8 +150,9 @@ void advance_frame (Simulation &sim) {
         advance_step(sim);
 }
 
-void advance_step (Simulation &sim) {	
-	cout << "Sim frame " << sim.frame << " [" << sim.step << "]" << endl;
+void advance_step (Simulation &sim) {
+    if (sim.frame % 20 == 0)
+	    cout << "Sim frame " << sim.frame << " [" << sim.step << "]" << endl;
     sim.time += sim.step_time;
     sim.step++;
 

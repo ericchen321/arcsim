@@ -45,6 +45,8 @@ struct Wind {
 
 struct Simulation {
     // variables
+    std::string name = "none";
+    std::string h5_output = "data/";
     double time;
     int frame, step;
     std::vector<Cloth> cloths;

@@ -190,8 +190,8 @@ Obstacle	obstacle.hpp	/^    Obstacle (): start_time(0), end_time(infinity), acti
 Obstacle	obstacle.hpp	/^struct Obstacle {$/;"	s
 OptOptions	optimization.hpp	/^    OptOptions (): _max_iter(100), _eps_x(1e-6), _eps_f(1e-12), _eps_g(1e-6) {}$/;"	f	struct:OptOptions
 OptOptions	optimization.hpp	/^struct OptOptions {$/;"	s
-PARSE_MAGIC	conf.cpp	641;"	d	file:
-PARSE_MAGIC	conf.cpp	657;"	d	file:
+PARSE_MAGIC	conf.cpp	645;"	d	file:
+PARSE_MAGIC	conf.cpp	661;"	d	file:
 PHYSICS_HPP	physics.hpp	28;"	d
 PLASTICITY_HPP	plasticity.hpp	28;"	d
 POPFILTER_HPP	popfilter.hpp	28;"	d
@@ -405,7 +405,7 @@ adje	mesh.hpp	/^    std::vector<Edge*> adje; \/\/ adjacent edges$/;"	m	struct:No
 adjf	mesh.hpp	/^    Face *adjf[2]; \/\/ adjacent faces$/;"	m	struct:Edge
 adjf	mesh.hpp	/^    std::vector<Face*> adjf; \/\/ adjacent faces$/;"	m	struct:Vert
 advance_frame	simulation.cpp	/^void advance_frame (Simulation &sim) {$/;"	f
-advance_step	simulation.cpp	/^void advance_step (Simulation &sim) {	$/;"	f
+advance_step	simulation.cpp	/^void advance_step (Simulation &sim) {$/;"	f
 alglib_linear_solve	taucs.cpp	/^vector<double> alglib_linear_solve(const SpMat<double>& A, const vector<double>& b) {$/;"	f
 alglib_linear_solve_vec	taucs.cpp	/^vector<Vec<C> > alglib_linear_solve_vec(const SpMat<Mat<C,C> >& A, const vector<Vec<C> >& b) {$/;"	f
 aligned_free	vectors.hpp	/^inline void aligned_free(void *ptr)    { _aligned_free(ptr); }$/;"	f
@@ -837,6 +837,7 @@ gradient	plasticity.cpp	/^void EmbedOpt::gradient (const double *x, double *g) c
 gradient	popfilter.cpp	/^void PopOpt::gradient (const double *x, double *g) const {$/;"	f	class:PopOpt
 gravity	simulation.hpp	/^    Vec3 gravity;$/;"	m	struct:Simulation
 grow	subset.cpp	/^void MeshSubset::grow(int rings) {$/;"	f	class:MeshSubset
+h5_output	simulation.hpp	/^    std::string h5_output = "data\/";$/;"	m	struct:Simulation
 handle_stiffness	magic.hpp	/^    double handle_stiffness, collision_stiffness;$/;"	m	struct:Magic
 handles	simulation.hpp	/^    std::vector<Handle*> handles;$/;"	m	struct:Simulation
 has_labeled_edges	dynamicremesh.cpp	/^bool has_labeled_edges (const Node *node) {$/;"	f
@@ -1054,6 +1055,7 @@ n	separateobs.cpp	/^    Vec3 n;$/;"	m	struct:SO::Ixn	file:
 n	sparse.hpp	/^    int m, n;$/;"	m	struct:SpMat
 nModules	simulation.hpp	/^          PopFilter, Plasticity, Fracture, nModules};$/;"	e	enum:Simulation::__anon2
 name	display.cpp	/^struct DisplayMode { string name; double scale; bool active; };$/;"	m	struct:DisplayMode	file:
+name	simulation.hpp	/^    std::string name = "none";$/;"	m	struct:Simulation
 name	util.cpp	/^template <typename T> string name (const T *p) {$/;"	f
 ncon	optimization.hpp	/^    int nvar, ncon;$/;"	m	struct:NLConOpt
 nearest_obstacle_planes	nearobs.cpp	/^map<Node*, Plane> nearest_obstacle_planes (const vector<Node*>& nodes, $/;"	f

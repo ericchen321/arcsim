@@ -78,8 +78,11 @@ void init_relax() {
 static void save (vector<Mesh*> &meshes, int frame) {
     if (!outprefix.empty() && frame < 100000)
         save_state(sim, stringf("%s/%05d", outprefix.c_str(), frame));
+
+    if (sim.name != "none") {
         // Only tracking the state of the first cloth mesh in the simulation.
         saved_meshes.push_back(sim.cloths[0].mesh);
+    }
 }
 
 static void save_timings () {
@@ -96,8 +99,8 @@ static void save_timings () {
 
 // TODO: currently we make an assumption that all arcsim simulations involve only a single cloth mesh.
 void save_h5(Simulation& sim) {
-    std::string data_dir = "data/";
-    std::string file_name = "test";
+    std::string data_dir = sim.h5_output;
+    std::string file_name = sim.name;
     file_name += ".h5";
 
     std::string path = data_dir + file_name;

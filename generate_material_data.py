@@ -8,10 +8,19 @@ import yaml
 import json
 import os
 import subprocess
+import threading
+from tqdm import tqdm
 from datetime import datetime
 from pathlib import Path
 from src_python.json import build_jsons
 
+def run_subprocess(cmd):
+    result = subprocess.run(
+        cmd,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True)
+    return result
 
 def main():
     p = argparse.ArgumentParser()
@@ -27,7 +36,7 @@ def main():
 
     # define the output directory and create it if it does not exist
     exp_name = "generate_material_data"
-    config_name = Path(args.dgen_config).stem
+    config_name = Path(args.master_config).stem
     time_curr = datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
     project_dir = os.path.join(
         "outputs",
@@ -40,7 +49,7 @@ def main():
 
     # build json's from the extracted options, and save
     # them to the output directory
-    jsons = build_jsons(master_config)
+    jsons = build_jsons(master_config, out_dir)
     for rollout_idx, json_config in enumerate(jsons):
         json_path = os.path.join(
             out_dir, f'rollout_{rollout_idx:03d}.json')
@@ -48,7 +57,8 @@ def main():
             json.dump(json_config, f, indent=4)
 
     # TODO: call ARCSim binary to simulate each rollout
-    for rollout_idx, json_config in enumerate(jsons):
+    cmds = []
+    for rollout_idx, _ in enumerate(jsons):
         json_path = os.path.join(
             out_dir, f'rollout_{rollout_idx:03d}.json')
         
@@ -57,7 +67,22 @@ def main():
         
         os.makedirs(rollout_dir, exist_ok=True)
 
-        subprocess.run(['./bin/arcsim', 'simulateoffline', json_path, rollout_dir])
+        cmds.append(['bin/arcsim', 'simulateoffline', json_path])
+
+
+    for cmd in tqdm(cmds):
+        run_subprocess(cmd)
+
+
+    # threads = []
+    # for cmd in cmds:
+    #     t = threading.Thread(target=run_subprocess, args=(cmd,))
+    #     t.start()
+    #     threads.append(t)
+
+    # # Wait for all to finish
+    # for t in threads:
+    #     t.join()
 
 
 if __name__ == '__main__':

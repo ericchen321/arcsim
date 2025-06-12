@@ -1,9 +1,9 @@
 # material properties
 density: 1.0
 meshes:
-  - "meshes/tshirt.obj"
+  - "meshes/dress3.obj"
 
-material:
+materials:
   - "materials/11oz-black-denim.json"
 
 # spatial sparsification
@@ -24,9 +24,7 @@ ground: false
 # only train/test rollouts
 data_gen_by: "simulation"
 rollouts:
-  num_rollouts: 32
+  num_rollouts: 25
   test_ratio: 0.25
-  num_anchors_train: 2
-  num_pts_per_anchor_train: 10
-  num_pts_per_anchor_test: 10
-  anchors_at_corners_test: true
+  num_anchors: 2
+  num_pts_per_anchor: 4
