@@ -14,8 +14,8 @@ spatially_sparsify: false
 
 # timing
 sim_duration: 5.0
-sim_fps: 20
-sim_substeps: 10
+sim_fps: 25
+sim_substeps: 3
 
 # world properties
 grav_const: -9.81
