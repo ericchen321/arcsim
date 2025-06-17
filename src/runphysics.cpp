@@ -95,7 +95,7 @@ void save_h5(Simulation& sim) {
 
     std::string path = data_dir + file_name;
     hid_t file_id = H5Fcreate(path.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
-
+    
     // compute velocities
     std::vector<std::vector<Vec3>> velocities;
     for (int i = 1; i < positions.size(); i++) {
@@ -111,17 +111,35 @@ void save_h5(Simulation& sim) {
         positions.erase(positions.begin());
     }
 
+    std::vector<float> positions_flat;
+    for (const auto& frame : positions) {
+        for (const auto& p : frame) {
+            positions_flat.push_back(p[0]);
+            positions_flat.push_back(p[1]);
+            positions_flat.push_back(p[2]);
+        }
+    }
+
+    std::vector<float> velocities_flat;
+    for (const auto& frame : velocities) {
+        for (const auto& v : frame) {
+            velocities_flat.push_back(v[0]);
+            velocities_flat.push_back(v[1]);
+            velocities_flat.push_back(v[2]);
+        }
+    }
+
     hsize_t dim_pos[3] = {positions.size(), positions[0].size(), 3 };
     hid_t pos_id = H5Screate_simple(3, dim_pos, NULL);
     hid_t dataset_pos_id = H5Dcreate2(file_id, "/positions", H5T_NATIVE_FLOAT, pos_id, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
-    H5Dwrite(dataset_pos_id, H5T_NATIVE_FLOAT, H5S_ALL, H5S_ALL, H5P_DEFAULT, positions.data());
+    H5Dwrite(dataset_pos_id, H5T_NATIVE_FLOAT, H5S_ALL, H5S_ALL, H5P_DEFAULT, positions_flat.data());
     H5Dclose(dataset_pos_id);
     H5Sclose(pos_id);
 
     hsize_t dim_vel[3] = {velocities.size(), velocities[0].size(), 3 };
     hid_t vel_id = H5Screate_simple(3, dim_vel, NULL);
     hid_t dataset_vel_id = H5Dcreate2(file_id, "/velocities", H5T_NATIVE_FLOAT, vel_id, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
-    H5Dwrite(dataset_vel_id, H5T_NATIVE_FLOAT, H5S_ALL, H5S_ALL, H5P_DEFAULT, velocities.data());
+    H5Dwrite(dataset_vel_id, H5T_NATIVE_FLOAT, H5S_ALL, H5S_ALL, H5P_DEFAULT, velocities_flat.data());
     H5Dclose(dataset_vel_id);
     H5Sclose(vel_id);
 
