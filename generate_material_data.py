@@ -9,10 +9,12 @@ import json
 import os
 import subprocess
 import threading
+import shutil
 from tqdm import tqdm
 from datetime import datetime
 from pathlib import Path
 from src_python.json import build_jsons
+from src_python.h5 import set_marker_types
 
 def run_subprocess(cmd):
     result = subprocess.run(
@@ -47,6 +49,9 @@ def main():
         time_curr)
     os.makedirs(out_dir, exist_ok=True)
 
+    # move master config to output file
+    shutil.copy(args.master_config, f'{out_dir}/dgen_config.yaml')
+
     # build json's from the extracted options, and save
     # them to the output directory
     jsons = build_jsons(master_config, out_dir)
@@ -61,12 +66,7 @@ def main():
     for rollout_idx, _ in enumerate(jsons):
         json_path = os.path.join(
             out_dir, f'rollout_{rollout_idx:03d}.json')
-        
-        rollout_dir = os.path.join(
-            out_dir, f'rollout_{rollout_idx:03d}')
-        
-        os.makedirs(rollout_dir, exist_ok=True)
-
+         
         cmds.append(['bin/arcsim', 'simulateoffline', json_path])
 
 
@@ -74,15 +74,8 @@ def main():
         run_subprocess(cmd)
 
 
-    # threads = []
-    # for cmd in cmds:
-    #     t = threading.Thread(target=run_subprocess, args=(cmd,))
-    #     t.start()
-    #     threads.append(t)
-
-    # # Wait for all to finish
-    # for t in threads:
-    #     t.join()
+    # Add additional info to rollout h5 files.
+    set_marker_types(jsons)
 
 
 if __name__ == '__main__':

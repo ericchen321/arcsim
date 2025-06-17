@@ -1308,6 +1308,7 @@ pos	mot_parser.hpp	/^    Vec3 pos;$/;"	m	struct:BodyFrame
 pos	separate.cpp	/^Vec3 pos (const Face *face, const Bary &b) {$/;"	f
 pos	separateobs.cpp	/^Vec3 pos (const Face *face, const Bary &b) {$/;"	f	namespace:SO
 pos	spline.cpp	/^T Spline<T>::pos (double t) const {$/;"	f	class:Spline
+positions	runphysics.cpp	/^std::vector<std::vector<Vec3>> positions;$/;"	v
 precompute	collision.cpp	/^void NormalOpt::precompute (const double *x) const {$/;"	f	class:NormalOpt
 precompute	localopt.cpp	/^void LocalOpt<s>::precompute (const double *x) const {$/;"	f	class:LocalOpt
 precompute	optimization.hpp	/^    virtual void precompute (const double *x) const {}$/;"	f	struct:NLConOpt
@@ -1412,7 +1413,7 @@ save	runphysics.cpp	/^static void save (vector<Mesh*> &meshes, int frame) {$/;"	
 save	runphysics.cpp	/^void save (Simulation &sim, int frame) {$/;"	f
 save	util.hpp	/^	bool save() { return mode == Save; }$/;"	f	struct:Serialize
 save_every	simulation.hpp	/^    int frame_steps, save_every;$/;"	m	struct:Simulation
-save_h5	runphysics.cpp	/^void save_h5(Simulation& sim) {$/;"	f
+save_h5	runphysics.cpp	/^void save_h5(Simulation& sim) {    $/;"	f
 save_obj	io.cpp	/^void save_obj (const Mesh &mesh, const string &filename) {$/;"	f
 save_objs	io.cpp	/^void save_objs (const vector<Mesh*> &meshes, const string &prefix) {$/;"	f
 save_obstacle_transforms	displayreplay.cpp	/^static void save_obstacle_transforms (const vector<Obstacle> &obs, int frame,$/;"	f	file:
@@ -1639,6 +1640,7 @@ vec3f	bvh.hpp	/^typedef Vec3 vec3f;$/;"	t
 vec_max	util.hpp	/^Vec<n,T> vec_max (const Vec<n,T> &u, const Vec<n,T> &v) {$/;"	f
 vec_min	util.hpp	/^Vec<n,T> vec_min (const Vec<n,T> &u, const Vec<n,T> &v) {$/;"	f
 vec_to_mat	blockvectors.hpp	/^Mat<m,n,T> vec_to_mat (const Vec<m*n,T> &a) {$/;"	f
+vector_subtract	runphysics.cpp	/^Vec3 vector_subtract(Vec3 a, Vec3 b) {$/;"	f
 vel	spline.cpp	/^T Spline<T>::vel (double t) const {$/;"	f	class:Spline
 velocity	simulation.hpp	/^    Vec3 velocity;$/;"	m	struct:Wind
 verbose	dynamicremesh.cpp	/^static const bool verbose = false;$/;"	v	file:

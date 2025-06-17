@@ -1,6 +1,7 @@
 # Author: Guanxiong, Ganidhu
 
 import trimesh
+import copy
 import numpy as np
 from typing import Dict, Any, List
 from sklearn.neighbors import NearestNeighbors
@@ -21,7 +22,7 @@ def build_jsons(master_config: Dict[str, Any], output_dir: str) -> List[Dict[str
     frame_steps = master_config["sim_substeps"]
     duration = master_config["sim_duration"]
     cloth_meshes = master_config["meshes"]
-    cloth_materials = master_config["materials"]
+    cloth_material = master_config["material"]
     gravity = [0.0, master_config["grav_const"], 0.0]
     disable = ["popfilter", "strainlimiting", "remeshing", "fracture"]
 
@@ -34,10 +35,6 @@ def build_jsons(master_config: Dict[str, Any], output_dir: str) -> List[Dict[str
     for mesh_path in cloth_meshes:
         transform = {
             "rotate": [0, 1, 0, 0],
-        }
-
-        handle = {
-            "nodes": [0]
         }
 
         mesh = trimesh.load_mesh(mesh_path)
@@ -57,7 +54,7 @@ def build_jsons(master_config: Dict[str, Any], output_dir: str) -> List[Dict[str
             "mesh": cloth_meshes[i],
             "transform": cloth_transforms[i],
             "materials": [{
-                "data": cloth_materials[i]
+                "data": cloth_material
             }],
             "remeshing": {
                 "size": [1, 1]
@@ -76,6 +73,7 @@ def build_jsons(master_config: Dict[str, Any], output_dir: str) -> List[Dict[str
             rot = np.random.random((4,)).tolist()
             rot[0] *= 90.0 # rotation angle in the range of 0 to 90
 
+
             cloth["transform"]["rotate"] = rot
 
             knn = trained_knns[i]
@@ -92,19 +90,20 @@ def build_jsons(master_config: Dict[str, Any], output_dir: str) -> List[Dict[str
             else:
                 handles.append({"nodes": anchor_ctr_idxs.tolist()})
 
+
         json_data = {
             "name": f'rollout_{rollout_idx:03d}',
-            "h5_output": f'{output_dir}/rollout_{rollout_idx:03d}/',
+            "h5_output": f'{output_dir}/',
             "frame_time": frame_time,
             "frame_steps": frame_steps,
             "end_time": duration,
-            "cloths": cloths,
+            "cloths": copy.deepcopy(cloths),
             "handles": handles,
             "gravity": gravity,
             "disable": disable
         }
 
-        jsons.append(json_data)
+        jsons.append(json_data.copy())
 
 
     return jsons

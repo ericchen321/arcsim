@@ -73,6 +73,8 @@ extern Simulation sim;
 
 extern std::vector<Mesh> saved_meshes;
 
+extern std::vector<std::vector<Vec3>> positions;
+
 void prepare (Simulation &sim);
 
 void relax_initial_state (Simulation &sim);
