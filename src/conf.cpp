@@ -92,6 +92,10 @@ void load_json (const string &configFilename, Simulation &sim) {
     file.close();
     // Gather general data
     sim.save_every = 1;
+    if (!json["name"].empty()) {
+        parse(sim.name, json["name"]);
+        parse(sim.h5_output, json["h5_output"]);
+    }
     if (!json["frame_time"].empty()) {
         parse(sim.frame_time, json["frame_time"]);
         parse(sim.frame_steps, json["frame_steps"], 1);
