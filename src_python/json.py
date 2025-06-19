@@ -65,7 +65,27 @@ def build_jsons(master_config: Dict[str, Any], output_dir: str) -> List[Dict[str
 
     num_rollouts = master_config["rollouts"]["num_rollouts"]
     jsons = []
-    # TODO: initialize I.C data randomly
+
+    # generate one additional "default rollout" containing the default mesh data (e.g. rest configuration) 
+    handles = []
+    for cloth in cloths:
+        cloth["transform"]["rotate"] = [0., 0., 0., 0.]
+        handles.append({"nodes": [0]})
+
+    json_data = {
+        "name": f'default_rollout',
+        "h5_output": f'{output_dir}/',
+        "frame_time": frame_time,
+        "frame_steps": frame_steps,
+        "end_time": duration,
+        "cloths": copy.deepcopy(cloths),
+        "handles": handles,
+        "gravity": gravity,
+        "disable": disable
+    }
+
+    jsons.append(json_data.copy())
+
     for rollout_idx in range(num_rollouts):
         handles = []
         for cloth in cloths:
@@ -90,7 +110,6 @@ def build_jsons(master_config: Dict[str, Any], output_dir: str) -> List[Dict[str
             else:
                 handles.append({"nodes": anchor_ctr_idxs.tolist()})
 
-
         json_data = {
             "name": f'rollout_{rollout_idx:03d}',
             "h5_output": f'{output_dir}/',
@@ -104,6 +123,5 @@ def build_jsons(master_config: Dict[str, Any], output_dir: str) -> List[Dict[str
         }
 
         jsons.append(json_data.copy())
-
 
     return jsons

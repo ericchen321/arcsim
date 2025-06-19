@@ -57,15 +57,15 @@ def main():
     jsons = build_jsons(master_config, out_dir)
     for rollout_idx, json_config in enumerate(jsons):
         json_path = os.path.join(
-            out_dir, f'rollout_{rollout_idx:03d}.json')
+            out_dir, f'{json_config["name"]}.json')
         with open(json_path, 'w') as f:
             json.dump(json_config, f, indent=4)
 
     # TODO: call ARCSim binary to simulate each rollout
     cmds = []
-    for rollout_idx, _ in enumerate(jsons):
+    for rollout_idx, config in enumerate(jsons):
         json_path = os.path.join(
-            out_dir, f'rollout_{rollout_idx:03d}.json')
+            out_dir, f'{config["name"]}.json')
          
         cmds.append(['bin/arcsim', 'simulateoffline', json_path])
 
