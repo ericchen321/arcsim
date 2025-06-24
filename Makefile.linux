@@ -4,13 +4,13 @@ CXX := g++
 # # uncomment to disable OpenGL functionality
 # NO_OPENGL := true
 
-CXXFLAGS := -Idependencies/include -I/opt/local/include
+CXXFLAGS := -g -Idependencies/include -I/opt/local/include -I/usr/include/hdf5/serial
 ifdef NO_OPENGL
 	CXXFLAGS := $(CXXFLAGS) -DNO_OPENGL
 endif
 CXXFLAGS_DEBUG := -Wall -g -Wno-sign-compare
 CXXFLAGS_RELEASE := -Wall -O3 -Wreturn-type -fopenmp
-LDFLAGS := -Ldependencies/lib -L/opt/local/lib -lpng -lz -ltaucs -llapack -llapacke -lblas -lboost_filesystem -lboost_system -lboost_thread -ljson -lgomp -lalglib
+LDFLAGS := -L/usr/lib/x86_64-linux-gnu/hdf5/serial/ -Ldependencies/lib -L/opt/local/lib -lpng -lz -ltaucs -llapack -llapacke -lblas -lboost_filesystem -lboost_system -lboost_thread -ljson -lgomp -lalglib -lhdf5_cpp -lhdf5
 ifndef NO_OPENGL
 	LDFLAGS := $(LDFLAGS) -lglut -lGLU -lGL
 endif

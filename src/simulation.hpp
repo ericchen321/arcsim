@@ -47,6 +47,8 @@ struct Simulation {
     // variables
     double time;
     int frame, step;
+    std::string name = "none";
+    std::string h5_output = "none";
     std::vector<Cloth> cloths;
     // constants
     int frame_steps, save_every;
@@ -68,6 +70,8 @@ struct Simulation {
     std::vector<Mesh*> cloth_meshes, obstacle_meshes;
 };
 extern Simulation sim;
+
+extern std::vector<std::vector<Vec3>> positions;
 
 void prepare (Simulation &sim);
 

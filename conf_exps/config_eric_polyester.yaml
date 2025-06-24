@@ -1,0 +1,32 @@
+# material properties
+density: 0.228 # http://graphics.berkeley.edu/papers/Wang-DDE-2011-08/material_parameters.pdf
+
+# REQUIRED: pass absolute path to mesh, so mesh location is accessible from se3 and arcsim code base.
+meshes:
+  - "/home/ganidhu/arcsim/meshes/fem_cloth_15x15_alternate.obj"
+
+material: "materials/pink-ribbon-brown.json"
+material_name: "polyester"
+
+# spatial sparsification
+# TODO:
+spatially_sparsify: false
+
+# timing
+sim_duration: 5.0
+sim_fps: 25
+sim_substeps: 5
+
+# world properties
+grav_const: -9.81
+ground: false
+
+# rollout generation options; including
+# dataset split and options that apply to
+# only train/test rollouts
+data_gen_by: "simulation"
+rollouts:
+  num_rollouts: 48
+  test_ratio: 0.25
+  num_anchors: 2
+  num_pts_per_anchor: 4

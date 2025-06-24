@@ -26,6 +26,44 @@ sudo chmod +x install.sh && sudo ./install.sh
 
 ## 📑 Usage
 
+### Generating Rollouts
+
+To export rollouts for training with ARCSim data, run the following python script:
+
+```shell
+python generate_material_data.py --master_config <PATH_TO_CONFIG>
+```
+
+For examples of config files refer to the `.yaml` files stored in `conf_exp`
+
+The config file allows the user to control the settings of the generated rollouts with the following options:
+
+```
+mesh_paths: path to an .obj mesh file that will be simulated as a cloth. Multiple meshes can optionally be passed in, but currently the rollouts with only track the state of the first cloth mesh.
+
+density: density of the mesh being simulated, in standard SI units.
+
+material: path to the material file used for the cloth mesh. This encodes the physical parameters of the cloth being simulated by ARCSim (e.g. stiffness)
+
+material_name: describes the material by it's type. Current options are "polyester" and "cotton"
+
+sim_duration: the total length of the simulation in seconds
+
+sim_fps: The number of frames generated per second of simulation
+
+sim_substeps: The number of actual simulation steps done per every frame
+
+grav_const: gravitational acceleration (applied on the y-axis)
+
+num_rollouts: number of rollouts to generate
+
+num_anchors: The number of different points areas of the mesh to pin
+
+num_pts_per_anchor: The number of actual vertices to pin per area
+```
+
+Generated rollouts are initialized with random pin points and orientation to make each rollout unique for training purposes.
+
 ### Commands
 
 For compilation instructions, see the INSTALL file. If you're on a

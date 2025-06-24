@@ -190,8 +190,8 @@ Obstacle	obstacle.hpp	/^    Obstacle (): start_time(0), end_time(infinity), acti
 Obstacle	obstacle.hpp	/^struct Obstacle {$/;"	s
 OptOptions	optimization.hpp	/^    OptOptions (): _max_iter(100), _eps_x(1e-6), _eps_f(1e-12), _eps_g(1e-6) {}$/;"	f	struct:OptOptions
 OptOptions	optimization.hpp	/^struct OptOptions {$/;"	s
-PARSE_MAGIC	conf.cpp	641;"	d	file:
-PARSE_MAGIC	conf.cpp	657;"	d	file:
+PARSE_MAGIC	conf.cpp	645;"	d	file:
+PARSE_MAGIC	conf.cpp	661;"	d	file:
 PHYSICS_HPP	physics.hpp	28;"	d
 PLASTICITY_HPP	plasticity.hpp	28;"	d
 POPFILTER_HPP	popfilter.hpp	28;"	d
@@ -837,6 +837,7 @@ gradient	plasticity.cpp	/^void EmbedOpt::gradient (const double *x, double *g) c
 gradient	popfilter.cpp	/^void PopOpt::gradient (const double *x, double *g) const {$/;"	f	class:PopOpt
 gravity	simulation.hpp	/^    Vec3 gravity;$/;"	m	struct:Simulation
 grow	subset.cpp	/^void MeshSubset::grow(int rings) {$/;"	f	class:MeshSubset
+h5_output	simulation.hpp	/^    std::string h5_output = "none";$/;"	m	struct:Simulation
 handle_stiffness	magic.hpp	/^    double handle_stiffness, collision_stiffness;$/;"	m	struct:Magic
 handles	simulation.hpp	/^    std::vector<Handle*> handles;$/;"	m	struct:Simulation
 has_labeled_edges	dynamicremesh.cpp	/^bool has_labeled_edges (const Node *node) {$/;"	f
@@ -1054,6 +1055,7 @@ n	separateobs.cpp	/^    Vec3 n;$/;"	m	struct:SO::Ixn	file:
 n	sparse.hpp	/^    int m, n;$/;"	m	struct:SpMat
 nModules	simulation.hpp	/^          PopFilter, Plasticity, Fracture, nModules};$/;"	e	enum:Simulation::__anon2
 name	display.cpp	/^struct DisplayMode { string name; double scale; bool active; };$/;"	m	struct:DisplayMode	file:
+name	simulation.hpp	/^    std::string name = "none";$/;"	m	struct:Simulation
 name	util.cpp	/^template <typename T> string name (const T *p) {$/;"	f
 ncon	optimization.hpp	/^    int nvar, ncon;$/;"	m	struct:NLConOpt
 nearest_obstacle_planes	nearobs.cpp	/^map<Node*, Plane> nearest_obstacle_planes (const vector<Node*>& nodes, $/;"	f
@@ -1306,6 +1308,7 @@ pos	mot_parser.hpp	/^    Vec3 pos;$/;"	m	struct:BodyFrame
 pos	separate.cpp	/^Vec3 pos (const Face *face, const Bary &b) {$/;"	f
 pos	separateobs.cpp	/^Vec3 pos (const Face *face, const Bary &b) {$/;"	f	namespace:SO
 pos	spline.cpp	/^T Spline<T>::pos (double t) const {$/;"	f	class:Spline
+positions	runphysics.cpp	/^std::vector<std::vector<Vec3>> positions;$/;"	v
 precompute	collision.cpp	/^void NormalOpt::precompute (const double *x) const {$/;"	f	class:NormalOpt
 precompute	localopt.cpp	/^void LocalOpt<s>::precompute (const double *x) const {$/;"	f	class:LocalOpt
 precompute	optimization.hpp	/^    virtual void precompute (const double *x) const {}$/;"	f	struct:NLConOpt
@@ -1410,6 +1413,7 @@ save	runphysics.cpp	/^static void save (vector<Mesh*> &meshes, int frame) {$/;"	
 save	runphysics.cpp	/^void save (Simulation &sim, int frame) {$/;"	f
 save	util.hpp	/^	bool save() { return mode == Save; }$/;"	f	struct:Serialize
 save_every	simulation.hpp	/^    int frame_steps, save_every;$/;"	m	struct:Simulation
+save_h5	runphysics.cpp	/^void save_h5(Simulation& sim) {$/;"	f
 save_obj	io.cpp	/^void save_obj (const Mesh &mesh, const string &filename) {$/;"	f
 save_objs	io.cpp	/^void save_objs (const vector<Mesh*> &meshes, const string &prefix) {$/;"	f
 save_obstacle_transforms	displayreplay.cpp	/^static void save_obstacle_transforms (const vector<Obstacle> &obs, int frame,$/;"	f	file:

@@ -32,6 +32,7 @@
 #include <vector>
 
 void save (Simulation &sim, int frame);
+void save_h5(Simulation &sim);
 void init_physics (const std::string &json_file, std::string outprefix, bool is_reloading);
 void init_resume(const std::vector<std::string> &args);
 void sim_step();
