@@ -1,5 +1,8 @@
 # material properties
-density: 0.228 # http://graphics.berkeley.edu/papers/Wang-DDE-2011-08/material_parameters.pdf
+density: 0.228 # density of the cloth
+
+# Provide path for the mesh that will be simulated as cloth by arcsim. The generated rollouts will only track
+# the simulation state of the first cloth mesh.
 
 # REQUIRED: pass absolute path to mesh, so mesh location is accessible from se3 and arcsim code base.
 meshes:
@@ -19,7 +22,6 @@ sim_substeps: 5
 
 # world properties
 grav_const: -9.81
-ground: false
 
 # rollout generation options; including
 # dataset split and options that apply to
@@ -27,6 +29,5 @@ ground: false
 data_gen_by: "simulation"
 rollouts:
   num_rollouts: 48
-  test_ratio: 0.25
   num_anchors: 2
   num_pts_per_anchor: 4
