@@ -13,9 +13,9 @@ material_name: "polyester"
 spatially_sparsify: false
 
 # timing
-sim_duration: 5.0
+sim_duration: 8.0
 sim_fps: 25
-sim_substeps: 5
+sim_substeps: 15
 
 # world properties
 grav_const: -9.81
@@ -26,7 +26,9 @@ ground: false
 # only train/test rollouts
 data_gen_by: "simulation"
 rollouts:
-  num_rollouts: 48
+  num_rollouts: 256
   test_ratio: 0.25
   num_anchors: 2
   num_pts_per_anchor: 4
+  # custom_handles: [0, 1, 16, 17, 14, 15, 29, 30, 255, 254, 239, 238, 240, 241, 224, 225]
+  # custom_rotation: [180, 1, 0, 0]

@@ -89,9 +89,12 @@ def build_jsons(master_config: Dict[str, Any], output_dir: str) -> List[Dict[str
     for rollout_idx in range(num_rollouts):
         handles = []
         for cloth in cloths:
-            # randomize starting orientation of cloth
-            rot = np.random.random((4,)).tolist()
-            rot[0] *= 90.0 # rotation angle in the range of 0 to 90
+            if "custom_rotation" in master_config["rollouts"]:
+                rot = master_config["rollouts"]["custom_rotation"]
+            else:
+                # randomize starting orientation of cloth
+                rot = np.random.random((4,)).tolist()
+                rot[0] *= 90.0 # rotation angle in the range of 0 to 90
 
 
             cloth["transform"]["rotate"] = rot
@@ -100,15 +103,18 @@ def build_jsons(master_config: Dict[str, Any], output_dir: str) -> List[Dict[str
             mesh = loaded_meshes[i]
 
             # randomize pin points
-            anchor_ctr_idxs = np.random.choice(
-                len(mesh.vertices), num_anchors, replace=False)
-
-            if num_pts_per_anchor > 1:
-                _, idx = knn.kneighbors(mesh.vertices[anchor_ctr_idxs])
-                handles.append({"nodes": idx.flatten().tolist()})
-
+            if "custom_handles" in master_config["rollouts"]:
+                handles.append({"nodes": master_config["rollouts"]["custom_handles"]})
             else:
-                handles.append({"nodes": anchor_ctr_idxs.tolist()})
+                anchor_ctr_idxs = np.random.choice(
+                    len(mesh.vertices), num_anchors, replace=False)
+
+                if num_pts_per_anchor > 1:
+                    _, idx = knn.kneighbors(mesh.vertices[anchor_ctr_idxs])
+                    handles.append({"nodes": idx.flatten().tolist()})
+
+                else:
+                    handles.append({"nodes": anchor_ctr_idxs.tolist()})
 
         json_data = {
             "name": f'rollout_{rollout_idx:03d}',
