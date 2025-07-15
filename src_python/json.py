@@ -6,7 +6,7 @@ import numpy as np
 from typing import Dict, Any, List
 from sklearn.neighbors import NearestNeighbors
 
-def build_jsons(master_config: Dict[str, Any], output_dir: str) -> List[Dict[str, Any]]:
+def build_jsons(master_config: Dict[str, Any], output_dir: str) -> List[Dict[str, Any]] | List[Dict[str, Any]]:
     """
     Build JSONs from the master configuration.
 
@@ -64,7 +64,18 @@ def build_jsons(master_config: Dict[str, Any], output_dir: str) -> List[Dict[str
         cloths.append(cloth)
 
     num_rollouts = master_config["rollouts"]["num_rollouts"]
+    test_ratio = master_config["rollouts"]["test_ratio"]
+    test_rollouts = max(1, num_rollouts * test_ratio)
+    train_idx = range(int(num_rollouts - test_rollouts))
+    test_idx = np.setdiff1d(range(num_rollouts), train_idx)
+
     jsons = []
+
+    col_size = master_config["mesh_data"]["col_count"]
+    row_size = master_config["mesh_data"]["row_count"]
+    corner_idx = [
+        0, col_size - 1, col_size * row_size - 1, col_size * row_size - row_size
+    ]
 
     # generate one additional "default rollout" containing the default mesh data (e.g. rest configuration) 
     handles = []
@@ -102,13 +113,16 @@ def build_jsons(master_config: Dict[str, Any], output_dir: str) -> List[Dict[str
             knn = trained_knns[i]
             mesh = loaded_meshes[i]
 
-            # randomize pin points
-            if "custom_handles" in master_config["rollouts"]:
-                handles.append({"nodes": master_config["rollouts"]["custom_handles"]})
+            if rollout_idx in test_idx:
+                anchor_ctr_idxs = np.random.choice(
+                    corner_idx, num_anchors, replace=False)
             else:
                 anchor_ctr_idxs = np.random.choice(
                     len(mesh.vertices), num_anchors, replace=False)
 
+            if "custom_handles" in master_config["rollouts"]:
+                handles.append({"nodes": master_config["rollouts"]["custom_handles"]})
+            else:
                 if num_pts_per_anchor > 1:
                     _, idx = knn.kneighbors(mesh.vertices[anchor_ctr_idxs])
                     handles.append({"nodes": idx.flatten().tolist()})
@@ -128,6 +142,11 @@ def build_jsons(master_config: Dict[str, Any], output_dir: str) -> List[Dict[str
             "disable": disable
         }
 
-        jsons.append(json_data.copy())
+        if rollout_idx in test_idx:
+            json_data["h5_output"] = f'{output_dir}/test/'
+            jsons.append(json_data.copy())
+        else:
+            json_data["h5_output"] = f'{output_dir}/train/'
+            jsons.append(json_data.copy())
 
     return jsons

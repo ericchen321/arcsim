@@ -5,6 +5,12 @@ density: 0.228 # http://graphics.berkeley.edu/papers/Wang-DDE-2011-08/material_p
 meshes:
   - "/home/ganidhu/arcsim/meshes/fem_cloth_15x15_alternate.obj"
 
+# TODO: this mesh data is useful for allocating the correct corners of the cloth mesh, but for
+# different mesh types, col_size and row_size may not be easily definable.
+mesh_data:
+  col_count: 16
+  row_count: 16
+
 material: "materials/pink-ribbon-brown.json"
 material_name: "polyester"
 
@@ -26,8 +32,8 @@ ground: false
 # only train/test rollouts
 data_gen_by: "simulation"
 rollouts:
-  num_rollouts: 256
-  test_ratio: 0.25
+  num_rollouts: 128
+  test_ratio: 0.1
   num_anchors: 2
   num_pts_per_anchor: 4
   # custom_handles: [0, 1, 16, 17, 14, 15, 29, 30, 255, 254, 239, 238, 240, 241, 224, 225]

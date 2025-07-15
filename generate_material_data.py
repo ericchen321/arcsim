@@ -47,7 +47,14 @@ def main():
     out_dir = os.path.join(
         project_dir,
         time_curr)
-    os.makedirs(out_dir, exist_ok=True)
+    out_train_dir = os.path.join(
+        out_dir,
+        "train")
+    out_test_dir = os.path.join(
+        out_dir,
+        "test")
+    os.makedirs(out_train_dir, exist_ok=True)
+    os.makedirs(out_test_dir, exist_ok=True)
 
     # move master config to output file
     shutil.copy(args.master_config, f'{out_dir}/dgen_config.yaml')
@@ -56,19 +63,19 @@ def main():
     # them to the output directory
     jsons = build_jsons(master_config, out_dir)
     for rollout_idx, json_config in enumerate(jsons):
+        out_json_dir = json_config['h5_output']
         json_path = os.path.join(
-            out_dir, f'{json_config["name"]}.json')
+            out_json_dir, f'{json_config["name"]}.json')
         with open(json_path, 'w') as f:
             json.dump(json_config, f, indent=4)
 
-    # TODO: call ARCSim binary to simulate each rollout
     cmds = []
     for rollout_idx, config in enumerate(jsons):
+        out_json_dir = config['h5_output']
         json_path = os.path.join(
-            out_dir, f'{config["name"]}.json')
+            out_json_dir, f'{config["name"]}.json')
          
         cmds.append(['bin/arcsim', 'simulateoffline', json_path])
-
 
     for cmd in tqdm(cmds):
         run_subprocess(cmd)
