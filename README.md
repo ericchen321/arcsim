@@ -28,6 +28,19 @@ sudo chmod +x install.sh && sudo ./install.sh
 
 ### Generating Rollouts
 
+Before exporting rollouts you can generate a conda environment with the needed packages by following the steps outlined below:
+
+```shell
+conda create -n arcsim python=3.10.13
+pip install --upgrade pip
+pip install -r requirements.txt
+```
+
+Afterwards, you can simply activate the conda environment with the following call
+```shell
+conda activate arcsim
+```
+
 To export rollouts for training with ARCSim data, run the following python script:
 
 ```shell

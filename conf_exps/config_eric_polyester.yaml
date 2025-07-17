@@ -27,6 +27,13 @@ sim_substeps: 15
 grav_const: -9.81
 ground: false
 
+damping: 1e-2
+
+wind:
+  velocity: [10, 0, 0]
+  density: 1
+  drag: 0
+
 # rollout generation options; including
 # dataset split and options that apply to
 # only train/test rollouts

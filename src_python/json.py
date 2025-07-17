@@ -24,12 +24,30 @@ def build_jsons(master_config: Dict[str, Any], output_dir: str) -> List[Dict[str
     cloth_meshes = master_config["meshes"]
     cloth_material = master_config["material"]
     gravity = [0.0, master_config["grav_const"], 0.0]
+    damping = float(master_config["damping"])
     disable = ["popfilter", "strainlimiting", "remeshing", "fracture"]
 
     num_anchors = master_config["rollouts"]["num_anchors"]
     num_pts_per_anchor = master_config["rollouts"]["num_pts_per_anchor"]
     trained_knns = []
     loaded_meshes = []
+
+    wind = {
+        "velocity": [0, 0, 0],
+        "density": 0,
+        "drag": 0
+    }
+
+    if "wind" in master_config:
+        wind_density = master_config["wind"]["density"]
+        wind_drag = master_config["wind"]["drag"]
+        wind_velocity = master_config["wind"]["velocity"]
+
+        wind = {
+            "velocity": wind_velocity,
+            "density": wind_density,
+            "drag": wind_drag
+        }
 
     cloth_transforms = []
     for mesh_path in cloth_meshes:
@@ -54,7 +72,8 @@ def build_jsons(master_config: Dict[str, Any], output_dir: str) -> List[Dict[str
             "mesh": cloth_meshes[i],
             "transform": cloth_transforms[i],
             "materials": [{
-                "data": cloth_material
+                "data": cloth_material,
+                "damping": damping
             }],
             "remeshing": {
                 "size": [1, 1]
@@ -92,6 +111,7 @@ def build_jsons(master_config: Dict[str, Any], output_dir: str) -> List[Dict[str
         "cloths": copy.deepcopy(cloths),
         "handles": handles,
         "gravity": gravity,
+        "wind": wind,
         "disable": disable
     }
 
