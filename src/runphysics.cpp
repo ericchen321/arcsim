@@ -36,6 +36,7 @@
 #include <boost/filesystem.hpp>
 #include <cstdio>
 #include <fstream>
+#include <unordered_map>
 
 #include <H5Cpp.h>
 using namespace H5;
@@ -120,6 +121,20 @@ void save_h5(Simulation& sim) {
         }
     }
 
+    std::unordered_map<Vert*, uint32_t> vert_idx_map;
+    for (uint32_t i = 0; i < sim.cloths[0].mesh.verts.size(); i++) {
+        vert_idx_map[sim.cloths[0].mesh.verts[i]] = i;
+    }
+
+    std::vector<uint32_t> tri_indices;
+    for (uint32_t i = 0; i < sim.cloths[0].mesh.faces.size(); i++) {
+        auto face = sim.cloths[0].mesh.faces[i];
+
+        tri_indices.push_back(vert_idx_map[face->v[0]]);
+        tri_indices.push_back(vert_idx_map[face->v[1]]);
+        tri_indices.push_back(vert_idx_map[face->v[2]]);
+    }
+
     std::vector<float> velocities_flat;
     for (const auto& frame : velocities) {
         for (const auto& v : frame) {
@@ -142,6 +157,14 @@ void save_h5(Simulation& sim) {
     H5Dwrite(dataset_vel_id, H5T_NATIVE_FLOAT, H5S_ALL, H5S_ALL, H5P_DEFAULT, velocities_flat.data());
     H5Dclose(dataset_vel_id);
     H5Sclose(vel_id);
+
+    hsize_t dim_tri[1] = {tri_indices.size()};
+    hid_t tri_id = H5Screate_simple(1, dim_tri, NULL);
+    hid_t dataset_tri_id = H5Dcreate2(file_id, "/tri_indices", H5T_NATIVE_INT, tri_id, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+    H5Dwrite(dataset_tri_id, H5T_NATIVE_INT, H5S_ALL, H5S_ALL, H5P_DEFAULT, tri_indices.data());
+    H5Dclose(dataset_tri_id);
+    H5Sclose(tri_id);
+
 
     H5Fclose(file_id);
 }
